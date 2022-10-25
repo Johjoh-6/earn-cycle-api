@@ -2,13 +2,24 @@
 
 ## Installation
 update your .env file with the following
+
 `DATABASE_URL="mysql://root:@127.0.0.1:3306/earncycle?serverVersion=8&charset=utf8mb4"`
 or
+
 `DATABASE_URL="postgresql://postgres:@127.0.0.1:5432/earncycle?serverVersion=14&charset=utf8"`
 
 can be mysql, mariaDb or postgres.
-then run
 
+run this command in the direcotry of the project
+`touch .env.local`
+in this file add the following
+```
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+```
+with the email and password you want to use for the admin user.
+
+then run
 ```bash
 bash setup-db.sh
 ```
