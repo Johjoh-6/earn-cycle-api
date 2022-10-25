@@ -27,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         // formats json for avoid the json ld format
         new Get(formats: ['json']),
         new GetCollection(formats: ['json']),
-        new Post(),
-        new Put(processor: UpdatedAtProcessor::class),
+        new Post(security:'is_granted("ROLE_ADMIN")'),
+        new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

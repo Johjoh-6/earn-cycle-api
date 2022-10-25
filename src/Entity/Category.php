@@ -25,11 +25,10 @@ use App\State\UpdatedAtProcessor;
     normalizationContext: ['groups' => ['category:read']],
     denormalizationContext: ['groups' => ['category:write']],
     operations: [
-        // formats json for avoid the json ld format
-        new Get(formats: ['json']),
+        new Get(),
         new GetCollection(),
-        new Post(),
-        new Put(processor: UpdatedAtProcessor::class ),
+        new Post('is_granted("ROLE_ADMIN")'),
+        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

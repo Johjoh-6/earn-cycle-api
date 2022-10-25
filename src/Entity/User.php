@@ -30,9 +30,10 @@ use App\State\UserProcessor;
     operations: [
         // formats json for avoid the json ld format
         new Get(),
+        // new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class),
+        new Put(processor: UserProcessor::class, security:'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -85,6 +86,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[groups(['user:write'])]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'The password need to be at least  {{ limit }} character long.'
+    )]
     #[SerializedName('password')]
     private ?string $plainPassword = null;
 

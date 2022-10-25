@@ -10,9 +10,12 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\RefreshDbController;
 use App\Repository\RubbishRepository;
+use App\Repository\UserRepository;
 use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -22,11 +25,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['rubbish:read']],
     denormalizationContext: ['groups' => ['rubbish:write']],
     operations: [
-        // formats json for avoid the json ld format
-        new Get(formats: ['json']),
-        new GetCollection(formats: ['json']),
+        new Get(),
+        // fetch Api
+        new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/api/rubbish/refresh-db/', controller: RefreshDbController::class),
+        new GetCollection(),
         new Post(security: 'is_fully_authenticated()'),
-        new Put(processor: UpdatedAtProcessor::class),
+        new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN") or object.createdBy == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
