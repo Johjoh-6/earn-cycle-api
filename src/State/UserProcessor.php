@@ -30,7 +30,7 @@ class UserProcessor implements ProcessorInterface
        match ($this->_request->getMethod()) {
             "POST" => $this->processPost($data),
             "PUT" => $this->processPut($data),
-            default => var_dump($operation),
+            default => "",
              
          };
         }
