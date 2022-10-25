@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
+use App\State\UpdatedAtProcessor;
+
 // use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -27,7 +29,7 @@ use ApiPlatform\Metadata\ApiFilter;
         new Get(formats: ['json']),
         new GetCollection(),
         new Post(),
-        new Put(),
+        new Put(processor: UpdatedAtProcessor::class ),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

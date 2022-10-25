@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\PartnerRepository;
+use App\State\UpdatedAtProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(formats: ['json']),
         new GetCollection(formats: ['json']),
         new Post(),
-        new Put(),
+        new Put(processor: UpdatedAtProcessor::class),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
