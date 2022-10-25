@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Odm\Filter\BooleanFilter as FilterBooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -31,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
-#[ApiFilter(FilterBooleanFilter::class, properties: ['deleted'])]
+#[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
 class Voucher
 {
     #[ORM\Id]
