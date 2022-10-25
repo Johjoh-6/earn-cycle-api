@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -34,6 +36,7 @@ use App\State\UserProcessor;
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -28,6 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
 class Rubbish
 {
     #[ORM\Id]
