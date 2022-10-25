@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\UserVoucherRepository;
+use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(formats: ['json']),
         new GetCollection(),
         new Post(),
-        new Put(),
+        new Put(processor: UpdatedAtProcessor::class),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

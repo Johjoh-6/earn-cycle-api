@@ -4,10 +4,9 @@ namespace App\State;
 
 use App\Entity\User;
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserProcessor implements ProcessorInterface
@@ -17,18 +16,24 @@ class UserProcessor implements ProcessorInterface
 
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        RequestStack $request,
     ) {
         $this->_passwordEncoder = $passwordEncoder;
         $this->_entityManager = $entityManager;
+        $this->_request = $request->getCurrentRequest();
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
-       match ($operation){
-              new Post() => $this->processPost($data),
-              new Put() => $this->processPut($data),
+        if($data instanceof User){
+       match ($this->_request->getMethod()) {
+            "POST" => $this->processPost($data),
+            "PUT" => $this->processPut($data),
+            default => var_dump($operation),
+             
          };
+        }
     }
 
     private function processPost(User $user): void

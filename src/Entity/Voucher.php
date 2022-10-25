@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\VoucherRepository;
+use App\State\UpdatedAtProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,8 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         // formats json for avoid the json ld format
         new Get(formats: ['json']),
         new GetCollection(formats: ['json']),
-        new Post(),
-        new Put(),
+        new Post(security: 'is_granted("ROLE_ADMIN")'),
+        new Put(processor: UpdatedAtProcessor::class),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

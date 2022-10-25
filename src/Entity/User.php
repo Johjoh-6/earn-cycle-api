@@ -27,10 +27,10 @@ use App\State\UserProcessor;
     denormalizationContext: ['groups' => ['user:write']],
     operations: [
         // formats json for avoid the json ld format
-        new Get(formats: ['json']),
-        new GetCollection(formats: ['json']),
+        new Get(),
+        new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(),
+        new Put(processor: UserProcessor::class),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -51,6 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
+    #[groups(['user:read', 'user:write'])]
     private array $roles = [];
 
     /**
@@ -99,11 +100,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $wallet = null;
 
     #[ORM\Column]
-    #[groups(['user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[groups(['user:read'])]
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]

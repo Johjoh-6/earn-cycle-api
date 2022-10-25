@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\RubbishRepository;
+use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,8 +23,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         // formats json for avoid the json ld format
         new Get(formats: ['json']),
         new GetCollection(formats: ['json']),
-        new Post(security: 'is_gtranted("IS_AUTHENTICATED_FULLY")'),
-        new Put(),
+        new Post(security: 'is_fully_authenticated()'),
+        new Put(processor: UpdatedAtProcessor::class),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
