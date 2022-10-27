@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
+use App\State\DeletedProcessor;
 use App\State\UpdatedAtProcessor;
 
 // use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
@@ -27,7 +28,8 @@ use App\State\UpdatedAtProcessor;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post('is_granted("ROLE_ADMIN")'),
+        new Post(security: 'is_granted("ROLE_ADMIN")'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_category', uriTemplate: '/categories/{id}/deleted'),
         new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]

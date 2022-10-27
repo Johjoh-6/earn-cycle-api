@@ -12,10 +12,10 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Controller\RefreshDbController;
 use App\Repository\RubbishRepository;
-use App\Repository\UserRepository;
+use App\State\DeletedProcessor;
+use App\State\GetCurrentUserProcessor;
 use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -27,9 +27,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         // fetch Api
-        new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/api/rubbish/refresh-db/', controller: RefreshDbController::class),
+        new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/rubbish/refresh-db/', controller: RefreshDbController::class),
         new GetCollection(),
-        new Post(security: 'is_fully_authenticated()'),
+        new Post(security: 'is_fully_authenticated()', processor: GetCurrentUserProcessor::class),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbish/{id}/deleted'),
         new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN") or object.createdBy == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -86,7 +87,8 @@ class Rubbish
     private ?bool $certified = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['rubbish:read'])]
     private ?User $createdBy = null;
 
     #[ORM\Column]

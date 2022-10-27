@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
+use App\State\DeletedProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -30,10 +31,11 @@ use App\State\UserProcessor;
     operations: [
         // formats json for avoid the json ld format
         new Get(),
-        // new GetCollection(security:'is_granted("ROLE_ADMIN")'),
-        new GetCollection(),
+        new GetCollection(security:'is_granted("ROLE_ADMIN")'),
+        // new GetCollection(),
         new Post(processor: UserProcessor::class),
         new Put(processor: UserProcessor::class, security:'is_granted("ROLE_ADMIN")'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

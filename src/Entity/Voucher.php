@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\VoucherRepository;
+use App\State\DeletedProcessor;
 use App\State\UpdatedAtProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(formats: ['json']),
         new Post(security: 'is_granted("ROLE_ADMIN")'),
         new Put(processor: UpdatedAtProcessor::class),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_voucher', uriTemplate: '/vouchers/{id}/deleted'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]

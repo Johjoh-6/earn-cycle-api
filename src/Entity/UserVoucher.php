@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\UserVoucherRepository;
+use App\State\DeletedProcessor;
 use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -26,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Post(),
         new Put(processor: UpdatedAtProcessor::class),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
