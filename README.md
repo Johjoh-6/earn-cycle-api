@@ -10,8 +10,8 @@ or
 
 can be mysql, mariaDb or postgres.
 
-run this command in the direcotry of the project
-`touch .env.local`
+run this command in the directory of the project
+`touch .env.local`  or create the file `.env.local`
 in this file add the following
 ```
 ADMIN_EMAIL=
