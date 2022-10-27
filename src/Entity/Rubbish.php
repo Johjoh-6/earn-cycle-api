@@ -12,12 +12,14 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Controller\RefreshDbController;
 use App\Repository\RubbishRepository;
+use App\State\AddGeoSpacialProcessor;
 use App\State\DeletedProcessor;
 use App\State\GetCurrentUserProcessor;
 use App\State\UpdatedAtProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 
 #[ORM\Entity(repositoryClass: RubbishRepository::class)]
 #[ApiResource(paginationItemsPerPage: 100)]
@@ -29,7 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         // fetch Api
         new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/rubbish/refresh-db/', controller: RefreshDbController::class),
         new GetCollection(),
-        new Post(security: 'is_fully_authenticated()', processor: GetCurrentUserProcessor::class),
+        new Post(security: 'is_fully_authenticated()', processor: AddGeoSpacialProcessor::class),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbish/{id}/deleted'),
         new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN") or object.createdBy == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
@@ -100,12 +102,16 @@ class Rubbish
     #[ORM\Column]
     private ?bool $deleted = null;
 
+    #[ORM\Column(type: 'point')]
+    private $cordinates = null;
+
     public function __construct()
     {
         $this->certified = false;
         $this->createdAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
         $this->deleted = false;
+        $this->cordinates = new \CrEOF\Spatial\PHP\Types\Geometry\Point();
     }
 
     public function getId(): ?int
@@ -265,6 +271,18 @@ class Rubbish
     public function setDeleted(bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getCordinates()
+    {
+        return $this->cordinates;
+    }
+
+    public function setCordinates($cordinates): self
+    {
+        $this->cordinates = $cordinates;
 
         return $this;
     }

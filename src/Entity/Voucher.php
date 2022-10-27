@@ -47,6 +47,7 @@ class Voucher
 
     #[ORM\ManyToOne(inversedBy: 'vouchers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['voucher:read', 'voucher:write'])]
     private ?Partner $partnerId = null;
 
     #[ORM\Column]
