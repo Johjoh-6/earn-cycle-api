@@ -33,8 +33,10 @@ class RefreshDbController extends AbstractController
                     $list = $this->getJson();
                         foreach($list as $rubbish){
                             $toAdd = $this->createNewRubbish($rubbish);
-                            $entityManager->persist($toAdd);
-
+                            if($entityManager->getRepository(Rubbish::class)->findOneBy(['longitude' => $toAdd->getLongitude(), 'latitude' => $toAdd->getLatitude()]) === null){
+                                $entityManager->persist($toAdd);
+                                $entityManager->flush();
+                            }
                         }
                         $entityManager->flush();
                         $nbItem = count($list);
