@@ -8,18 +8,22 @@ use App\Entity\Rubbish;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class GetCurrentUserProcessor implements ProcessorInterface
 {
     private $_entityManager;
     private $_security;
+    private $_tokenStorage;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        Security $security
+        Security $security,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->_entityManager = $entityManager;
         $this->_security = $security;
+        $this->_tokenStorage = $tokenStorage;
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
@@ -33,13 +37,15 @@ class GetCurrentUserProcessor implements ProcessorInterface
 
     protected function getUser(): ?User
     {
-        $token = $this->tokenStorage->getToken();
+        // $token = $this->tokenStorage->getToken();
 
-        if (!$token) {
-            return null;
-        }
+        // if (!$token) {
+        //     return null;
+        // }
 
-        $user = $token->getUser();
+        // $user = $token->getUser();
+        
+        $user = $this->_security->getUser();
 
         if (!$user instanceof User) {
             return null;
