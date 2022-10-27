@@ -27,7 +27,7 @@ or just run script with your editor.
 
 ## Usage
 
-This api is made with Api platform and Symfony 5.4
+This api is made with Api platform and Symfony 5.4 // PHP 8.0
 so by default Api platform return to you with get a json ld format.
 you need to specify with `.json` at the end for only get a json format.
 like :
