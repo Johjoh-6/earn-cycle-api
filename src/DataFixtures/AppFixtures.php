@@ -38,7 +38,7 @@ class AppFixtures extends Fixture
         $manager->persist($admin);
 
         // category list
-        $categoryList = ['Plastic', 'Glass', 'Cardboard', 'Metal', 'Trash', 'Compost', 'Wood'];
+        $categoryList = ['Plastic', 'Glass', 'Cardboard', 'Metal', 'Compost', 'Wood', 'Waste', 'Clothes', 'Recycling', 'Other'];
         foreach($categoryList as $category){
             $cat = new Category();
             $cat->setName($category);
