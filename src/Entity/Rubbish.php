@@ -29,9 +29,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         // fetch Api
         new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/rubbish/refresh-db/', controller: RefreshDbController::class),
         new GetCollection(),
-        new Post(security: 'is_fully_authenticated()', processor: GetCurrentUserProcessor::class),
+        new Post(processor: GetCurrentUserProcessor::class, security: 'is_fully_authenticated()'),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbish/{id}/deleted'),
-        new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN") or object.createdBy == user'),
+        new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN")', denormalizationContext: ['groups' => ['rubbish-admin:write']], normalizationContext: ['groups' => ['rubbish-admin:read']]),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -45,45 +45,46 @@ class Rubbish
 
     #[ORM\ManyToOne(inversedBy: 'rubbishList')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?Category $category = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $nbStreet = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $streetName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $country = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
-    #[Groups(['rubbish:read', 'rubbish:write'])]
+    #[Groups(['rubbish:read', 'rubbish:write', 'rubbish-admin:read', 'rubbish-admin:write'])]
     private ?string $postalCode = null;
 
     #[ORM\Column]
+    #[Groups(['rubbish-admin:read', 'rubbish-admin:write'])]
     private ?bool $certified = null;
 
     #[ORM\ManyToOne]
@@ -98,6 +99,7 @@ class Rubbish
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
+    #[Groups(['rubbish-admin:read', 'rubbish-admin:write'])]
     private ?bool $deleted = null;
 
     public function __construct()
