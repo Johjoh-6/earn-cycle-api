@@ -8,6 +8,7 @@ use App\Entity\Rubbish;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class GetCurrentUserProcessor implements ProcessorInterface
@@ -15,12 +16,15 @@ class GetCurrentUserProcessor implements ProcessorInterface
     private $_entityManager;
     private $_security;
     private $_tokenStorage;
+    private $_jwtManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         Security $security,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
+        JWTTokenManagerInterface $jwtManager
     ) {
+        $this->_jwtManager = $jwtManager;
         $this->_entityManager = $entityManager;
         $this->_security = $security;
         $this->_tokenStorage = $tokenStorage;
@@ -37,20 +41,25 @@ class GetCurrentUserProcessor implements ProcessorInterface
 
     protected function getUser(): ?User
     {
-        // $token = $this->tokenStorage->getToken();
+        $token = $this->_tokenStorage->getToken();
 
         // if (!$token) {
         //     return null;
         // }
 
-        // $user = $token->getUser();
+        $user = $token->getUser();
         
-        $user = $this->_security->getUser();
+        $decodedJwtToken = $this->_jwtManager->decode($this->_tokenStorageInterface->getToken());
+        $userId = $decodedJwtToken['userId'];
+        
 
-        if (!$user instanceof User) {
-            return null;
-        }
+        return $this->_entityManager->getRepository(User::class)->find($userId);
 
-        return $user;
+        // $user = $this->_security->getUser();
+
+        // if (!$user instanceof User) {
+        //     return null;
+        // }
+        // return $user;
     }
 }
