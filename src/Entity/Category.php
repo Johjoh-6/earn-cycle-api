@@ -23,13 +23,13 @@ use App\State\UpdatedAtProcessor;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['category:read']],
+    normalizationContext: ['groups' => ['category:read', 'categoryRubbish:read', 'rubbish:read']],
     denormalizationContext: ['groups' => ['category:write']],
     operations: [
         new Get(),
         new GetCollection(),
         new Post(security: 'is_granted("ROLE_ADMIN")'),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_category', uriTemplate: '/categories/{id}/deleted'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_category', uriTemplate: '/categories/{id}/deleted', security:'is_granted("ROLE_ADMIN")'),
         new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -44,7 +44,7 @@ class Category
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['category:read', 'category:write'])]
+    #[Groups(['category:read', 'category:write', 'rubbish:read', 'categoryRubbish:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -58,6 +58,7 @@ class Category
     private ?bool $deleted = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Rubbish::class)]
+    #[Groups(['category:read'])]
     private Collection $rubbishList;
 
     public function __construct()

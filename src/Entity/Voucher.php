@@ -23,12 +23,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['voucher:read']],
     denormalizationContext: ['groups' => ['voucher:write']],
     operations: [
-        // formats json for avoid the json ld format
-        new Get(formats: ['json']),
-        new GetCollection(formats: ['json']),
+        new Get(normalizationContext: ['groups' => ['voucherUser:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['voucherUser:read']]),
         new Post(security: 'is_granted("ROLE_ADMIN")'),
-        new Put(processor: UpdatedAtProcessor::class),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_voucher', uriTemplate: '/vouchers/{id}/deleted'),
+        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_ADMIN")'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_voucher', uriTemplate: '/vouchers/{id}/deleted', security: 'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -42,24 +41,25 @@ class Voucher
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'vouchers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?Partner $partnerId = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?int $limitUse = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
@@ -69,6 +69,7 @@ class Voucher
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
+    #[Groups(['voucher:read'])]
     private ?bool $deleted = null;
 
     public function __construct()

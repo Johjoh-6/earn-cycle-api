@@ -34,8 +34,8 @@ use App\State\UserProcessor;
         new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         // new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class, security:'is_granted("ROLE_ADMIN")'),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted'),
+        new Put(processor: UserProcessor::class, security:'is_granted("ROLE_ADMIN") or object == user'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted', security:'is_granted("ROLE_ADMIN") or object == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read'])]
     private array $roles = [];
 
     /**
