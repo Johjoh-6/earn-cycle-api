@@ -16,8 +16,16 @@ in this file add the following
 ```
 ADMIN_EMAIL=
 ADMIN_PASSWORD=
+
+# pwd for reload db
+REFRESH_DB_PASSWORD=
 ```
 with the email and password you want to use for the admin user.
+And the password for the reload db command.
+
+### Warning
+Make sure the folder `public/data/` and `config/jwt/` exist.
+
 
 then run
 ```bash

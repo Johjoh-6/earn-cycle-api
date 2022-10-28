@@ -23,12 +23,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['voucher:read']],
     denormalizationContext: ['groups' => ['voucher:write']],
     operations: [
-        // formats json for avoid the json ld format
-        new Get(formats: ['json']),
-        new GetCollection(formats: ['json']),
+        new Get(normalizationContext: ['groups' => ['voucherUser:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['voucherUser:read']]),
         new Post(security: 'is_granted("ROLE_ADMIN")'),
-        new Put(processor: UpdatedAtProcessor::class),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_voucher', uriTemplate: '/vouchers/{id}/deleted'),
+        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_ADMIN")'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_voucher', uriTemplate: '/vouchers/{id}/deleted', security: 'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
@@ -42,24 +41,31 @@ class Voucher
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'The description need to be at least  {{ limit }} character long.',
+        max: 255,
+        maxMessage: 'The description cannot be longer than {{ limit }} characters.'
+    )]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'vouchers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?Partner $partnerId = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?int $limitUse = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
@@ -69,7 +75,19 @@ class Voucher
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
+    #[Groups(['voucher:read'])]
     private ?bool $deleted = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'The title need to be at least  {{ limit }} character long.',
+        max: 255,
+        maxMessage: 'The title cannot be longer than {{ limit }} characters.'
+    )]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -175,6 +193,18 @@ class Voucher
     public function setDeleted(bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

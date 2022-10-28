@@ -38,8 +38,7 @@ class UserProcessor implements ProcessorInterface
 
     private function processPost(User $user): void
     {
-        $user->setPassword($this->_passwordEncoder->hashPassword($user, $user->getPlainPassword()));
-        $user->eraseCredentials();
+        $user->setPassword($this->_passwordEncoder->hashPassword($user, $user->getPassword()));
         $this->_entityManager->persist($user);
         $this->_entityManager->flush();
     }
@@ -47,9 +46,8 @@ class UserProcessor implements ProcessorInterface
     private function processPut(User $user): void
     {
         $user->setUpdateAt(new \DateTimeImmutable());
-        if(!empty($user->getPlainPassword())){
-            $user->setPassword($this->_passwordEncoder->hashPassword($user, $user->getPlainPassword()));
-        $user->eraseCredentials();
+        if(!empty($user->getPassword())){
+            $user->setPassword($this->_passwordEncoder->hashPassword($user, $user->getPassword()));
         }
         $this->_entityManager->persist($user);
         $this->_entityManager->flush();

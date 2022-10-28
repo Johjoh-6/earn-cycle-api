@@ -25,11 +25,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['partner:read']],
     denormalizationContext: ['groups' => ['partner:write']],
     operations: [
-        // formats json for avoid the json ld format
-        new Get(formats: ['json']),
-        new GetCollection(formats: ['json']),
+        new Get(),
+        new GetCollection(),
         new Post(security:'is_granted("ROLE_ADMIN")'),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_partner', uriTemplate: '/partners/{id}/deleted'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_partner', uriTemplate: '/partners/{id}/deleted', security:'is_granted("ROLE_ADMIN")'),
         new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN")'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -44,10 +43,11 @@ class Partner
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[groups(['partner:read', 'partner:write'])]
+    #[groups(['partner:read', 'partner:write', 'voucher:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'partnerId', targetEntity: Voucher::class)]
+    #[Groups(['partner:read'])]
     private Collection $vouchers;
 
     #[ORM\Column]

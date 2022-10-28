@@ -22,7 +22,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\EventListener\LoginSuccessListener:
+    acme_api.event.login_success_listener:
+        class: App\EventListener\LoginSuccessListener
+        arguments: [ '@request_stack' ]
         tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onLoginSuccess }
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onLoginSuccess }
 
