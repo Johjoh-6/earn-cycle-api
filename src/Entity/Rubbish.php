@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RubbishRepository::class)]
-#[ApiResource(paginationItemsPerPage: 1000)]
 #[ApiResource(
     normalizationContext: ['groups' => ['rubbish:read', 'category:read']],
     denormalizationContext: ['groups' => ['rubbish:write']],
@@ -29,11 +28,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         // fetch Api
         new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/rubbish/refresh-db/', controller: RefreshDbController::class),
         new GetCollection(normalizationContext: ['groups' => ['rubbish:read', 'category:read']]),
-        new Post(security: 'is_fully_authenticated() && is_granted("ROLE_USER")', name: 'post_rubbish', uriTemplate: '/rubbishes/add', controller: UserRubbishController::class),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbish/{id}/deleted', security: 'is_granted("ROLE_ADMIN") or object.createdBy == user'),
+        new Post(security: 'is_fully_authenticated() && is_granted("ROLE_USER")', name: 'post_rubbish', uriTemplate: '/rubbishes', controller: UserRubbishController::class),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbishes/{id}/deleted', security: 'is_granted("ROLE_ADMIN") or object.createdBy == user'),
         new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN")', denormalizationContext: ['groups' => ['rubbish-admin:write']], normalizationContext: ['groups' => ['rubbish-admin:read']]),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
-    ]
+    ],
+    paginationItemsPerPage: 1000
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
 class Rubbish

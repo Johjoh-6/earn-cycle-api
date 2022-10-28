@@ -30,7 +30,7 @@ class UserRubbishController extends AbstractController
         $this->_tokenStorage = $tokenStorage;
     }
 
-    #[Route('/api/rubbishes/add', name: 'post_rubbish', methods: ['POST'])]
+    #[Route('/api/rubbishes', name: 'post_rubbish', methods: ['POST'])]
     public function index(Request $request, ValidatorInterface $validator): Response
     {
         $content = $request->getContent();
