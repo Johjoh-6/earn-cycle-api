@@ -41,6 +41,12 @@ class Voucher
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'The description need to be at least  {{ limit }} character long.',
+        max: 255,
+        maxMessage: 'The description cannot be longer than {{ limit }} characters.'
+    )]
     #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?string $description = null;
 
@@ -71,6 +77,17 @@ class Voucher
     #[ORM\Column]
     #[Groups(['voucher:read'])]
     private ?bool $deleted = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'The title need to be at least  {{ limit }} character long.',
+        max: 255,
+        maxMessage: 'The title cannot be longer than {{ limit }} characters.'
+    )]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -176,6 +193,18 @@ class Voucher
     public function setDeleted(bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
