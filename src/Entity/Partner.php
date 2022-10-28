@@ -43,10 +43,11 @@ class Partner
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[groups(['partner:read', 'partner:write'])]
+    #[groups(['partner:read', 'partner:write', 'voucher:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'partnerId', targetEntity: Voucher::class)]
+    #[Groups(['partner:read'])]
     private Collection $vouchers;
 
     #[ORM\Column]

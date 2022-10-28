@@ -40,6 +40,7 @@ class UserVoucher
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['userVoucher:read'])]
     private ?Voucher $voucherId = null;
 
     #[ORM\ManyToOne(inversedBy: 'userVouchers')]

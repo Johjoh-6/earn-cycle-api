@@ -29,11 +29,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(security: 'is_granted("ROLE_ADMIN")', name: 'refresh-db', uriTemplate: '/rubbish/refresh-db/', controller: RefreshDbController::class),
         new GetCollection(normalizationContext: ['groups' => ['rubbish:read', 'category:read']]),
         new Post(security: 'is_fully_authenticated() && is_granted("ROLE_USER")', name: 'post_rubbish', uriTemplate: '/rubbishes', controller: UserRubbishController::class),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbishes/{id}/deleted', security: 'is_granted("ROLE_ADMIN") or object.createdBy == user'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_rubbish', uriTemplate: '/rubbishes/{id}/deleted', security: 'is_granted("ROLE_ADMIN")'),
         new Put(processor: UpdatedAtProcessor::class, security:'is_granted("ROLE_ADMIN")', denormalizationContext: ['groups' => ['rubbish-admin:write']], normalizationContext: ['groups' => ['rubbish-admin:read']]),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ],
-    paginationItemsPerPage: 1000
+    paginationItemsPerPage: 500
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
 class Rubbish

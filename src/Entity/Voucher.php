@@ -51,15 +51,15 @@ class Voucher
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?int $limitUse = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
