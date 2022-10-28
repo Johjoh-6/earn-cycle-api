@@ -20,19 +20,13 @@ use Symfony\Component\Security\Core\Security;
 class UserRubbishController extends AbstractController
 {
     private $_entityManager;
-    private $_security;
     private $_tokenStorage;
-    private $_jwtManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        Security $security,
         TokenStorageInterface $tokenStorage,
-        JWTTokenManagerInterface $jwtManager
     ) {
-        $this->_jwtManager = $jwtManager;
         $this->_entityManager = $entityManager;
-        $this->_security = $security;
         $this->_tokenStorage = $tokenStorage;
     }
 
@@ -78,17 +72,7 @@ class UserRubbishController extends AbstractController
         if (!$token) {
             return null;
         }
-
         $user = $token->getUser();
-        
-        // $decodedJwtToken = $this->_jwtManager->decode($this->_tokenStorageInterface->getToken());
-        // $userId = $decodedJwtToken['userId'];
-        
-
-        // return $this->_entityManager->getRepository(User::class)->find($userId);
-
-        // $user = $this->_security->getUser();
-
         if (!$user instanceof User) {
             return null;
         }
