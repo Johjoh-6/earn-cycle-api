@@ -10,8 +10,8 @@ class LoginSuccessListener
 {
     public function onLoginSuccess(JWTCreatedEvent $event): void
     {
+        // add one day of authorization
         $expiration = new \DateTime('+1 day');
-        $expiration->setTime(2, 0, 0);
 
         $user = $event->getUser();
         $payload = $event->getData();
