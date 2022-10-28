@@ -34,7 +34,7 @@ use App\State\UserProcessor;
         new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         // new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class, security:'is_granted("ROLE_ADMIN") or object == user'),
+        new Put(processor: UserProcessor::class, security:'is_fully_authenticated() && is_granted("ROLE_USER") or object == user'),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted', security:'is_granted("ROLE_ADMIN") or object == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -64,6 +64,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'The password need to be at least  {{ limit }} character long.'
+    )]
+    #[groups(['user:write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -85,16 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[groups(['user:read', 'user:write'])]
     private ?string $adress = null;
-
-    #[groups(['user:write'])]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 8,
-        minMessage: 'The password need to be at least  {{ limit }} character long.'
-    )]
-    #[SerializedName('password')]
-    private ?string $plainPassword = null;
-
 
     #[Assert\NotBlank]
     #[groups(['user:read', 'user:write'])]
@@ -198,7 +194,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        $this->plainPassword = null;
     }
 
     public function getLname(): ?string
@@ -245,18 +240,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdress(string $adress): self
     {
         $this->adress = $adress;
-
-        return $this;
-    }
-
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword(string $plainPassword): self
-    {
-        $this->plainPassword = $plainPassword;
 
         return $this;
     }
