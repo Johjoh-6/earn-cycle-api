@@ -34,7 +34,7 @@ use App\State\UserProcessor;
         new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         // new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class, security:'is_fully_authenticated() && is_granted("ROLE_USER") or object == user'),
+        new Put(processor: UserProcessor::class, security:'is_fully_authenticated() && is_granted("ROLE_USER") or object == user', denormalizationContext: ['groups'=> 'user-wallet:write']),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted', security:'is_granted("ROLE_ADMIN") or object == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     #[Assert\Email(
         message: 'The email {{ value }} is not a valid email.',
     )]
@@ -74,26 +74,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write' , 'user-wallet:write'])]
     private ?string $lname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write' , 'user-wallet:write'])]
     private ?string $fname = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write' , 'user-wallet:write'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     private ?string $adress = null;
 
     #[Assert\NotBlank]
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     #[ORM\Column(length: 255)]
     private ?string $nickname = null;
 
@@ -101,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $level = null;
 
-    #[groups(['user:read', 'user:write'])]
+    #[groups(['user:read', 'user-wallet:write'])]
     #[ORM\Column]
     private ?int $wallet = null;
 
@@ -121,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->level = 0;
         $this->wallet = 0;
+        $this->roles = ['ROLE_USER'];
         $this->createdAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
         $this->deleted = false;

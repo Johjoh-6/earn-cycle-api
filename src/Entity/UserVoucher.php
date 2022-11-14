@@ -22,11 +22,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['userVoucher:read']],
     denormalizationContext: ['groups' => ['userVoucher:write']],
     operations: [
-        new Get(security: "is_granted('ROLE_USER) && object.getUserId() == user"),
-        new GetCollection(security: "is_granted(ROLE_ADMIN)"),
-        new Post(security: "is_granted('ROLE_USER)"),
-        new Put(processor: UpdatedAtProcessor::class, security: "is_granted('ROLE_USER) && object.getUserId() == user"),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted',  security: "is_granted('ROLE_USER) && object.getUserId() == user"),
+        new Get(security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
+        new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
+        new Post(security: 'is_granted("ROLE_USER")'),
+        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted',  security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
 )]
