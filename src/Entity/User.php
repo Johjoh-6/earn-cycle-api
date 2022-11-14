@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\State\UserProcessor;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -40,6 +41,7 @@ use App\State\UserProcessor;
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
+#[UniqueEntity(fields: ['email'], message: 'L\'email est déjà utilisé')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
