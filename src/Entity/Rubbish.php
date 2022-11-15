@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -46,6 +47,7 @@ class Rubbish
     #[ORM\ManyToOne(inversedBy: 'rubbishList')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['rubbish:read', 'rubbish:write','rubbish-admin:read', 'rubbish-admin:write'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?Category $category = null;
 
     #[ORM\Column(length: 100)]
@@ -99,7 +101,7 @@ class Rubbish
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
-    #[Groups(['rubbish-admin:read', 'rubbish-admin:write'])]
+    #[Groups(['rubbish:read','rubbish-admin:read', 'rubbish-admin:write'])]
     private ?bool $deleted = null;
 
     public function __construct()
