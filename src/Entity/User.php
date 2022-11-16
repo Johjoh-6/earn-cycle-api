@@ -119,8 +119,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: UserVoucher::class)]
     private Collection $userVouchers;
 
+    #[ORM\Column]
+    private ?int $trees = null;
+
     public function __construct()
     {
+        $this->trees = 0;
         $this->level = 0;
         $this->wallet = 0;
         $this->roles = ['ROLE_USER'];
@@ -345,6 +349,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userVoucher->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTrees(): ?int
+    {
+        return $this->trees;
+    }
+
+    public function setTrees(int $trees): self
+    {
+        $this->trees = $trees;
 
         return $this;
     }
