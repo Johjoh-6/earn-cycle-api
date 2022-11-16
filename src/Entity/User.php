@@ -120,6 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $userVouchers;
 
     #[ORM\Column]
+    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     private ?int $trees = null;
 
     public function __construct()
