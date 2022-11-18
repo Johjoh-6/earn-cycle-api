@@ -31,7 +31,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     denormalizationContext: ['groups' => ['user:write']],
     operations: [
         // formats json for avoid the json ld format
-        new Get(),
+        new Get(denormalizationContext: ['groups'=> 'user-wallet:write']),
         new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         // new GetCollection(),
         new Post(processor: UserProcessor::class),
@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $userVouchers;
 
     #[ORM\Column]
-    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
+    #[groups(['user:read', 'user-wallet:write'])]
     private ?int $trees = null;
 
     public function __construct()

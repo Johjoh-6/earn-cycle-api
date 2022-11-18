@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -53,6 +54,7 @@ class Voucher
     #[ORM\ManyToOne(inversedBy: 'vouchers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'ipartial', properties: ['partner.name'])]
     private ?Partner $partnerId = null;
 
     #[ORM\Column]
@@ -89,8 +91,14 @@ class Voucher
     #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
     private ?string $name = null;
 
+    #[ORM\Column]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Assert\NotBlank]
+    private ?int $price = null;
+
     public function __construct()
     {
+        $this->price = 0;
         $this->createdAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
         $this->deleted = false;
@@ -205,6 +213,18 @@ class Voucher
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

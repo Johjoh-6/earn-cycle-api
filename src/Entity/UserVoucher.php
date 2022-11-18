@@ -23,11 +23,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['userVoucher:write']],
     operations: [
         new Get(security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
-        new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
+        new GetCollection(security: 'is_granted("ROLE_ADMIN")', normalizationContext: ['groups' => ['userVoucherAdmin:read']]),
         new Post(security: 'is_granted("ROLE_USER")'),
-        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
-        new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted',  security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
-        new Delete(security: 'is_granted("ROLE_ADMIN")')
+        new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_USER") && object.getUserId() == user', denormalizationContext: ['groups' => ['userVoucherAdmin:write']]),
+        new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted',  security: 'is_granted("ROLE_USER") && object.getUserId() == user',  denormalizationContext: ['groups' => ['userVoucherAdmin:write']]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")',  denormalizationContext: ['groups' => ['userVoucherAdmin:write']])
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
@@ -40,25 +40,29 @@ class UserVoucher
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userVoucher:read'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?Voucher $voucherId = null;
 
     #[ORM\ManyToOne(inversedBy: 'userVouchers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?User $userId = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['userVoucher:read', 'userVoucher:write'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?int $claim = null;
 
     #[ORM\Column]
+    #[Groups(['userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
+    #[Groups(['userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?bool $deleted = null;
 
     public function __construct()

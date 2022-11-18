@@ -47,7 +47,7 @@ class Rubbish
     #[ORM\ManyToOne(inversedBy: 'rubbishList')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['rubbish:read', 'rubbish:write','rubbish-admin:read', 'rubbish-admin:write'])]
-    #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
+    #[ApiFilter(SearchFilter::class, strategy: 'ipartial', properties: ['category.name'])]
     private ?Category $category = null;
 
     #[ORM\Column(length: 100)]
