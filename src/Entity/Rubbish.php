@@ -91,7 +91,7 @@ class Rubbish
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, referencedColumnName: 'id')]
-    #[Groups(['rubbish:read'])]
+    #[Groups(['rubbish:read', 'rubbish:write'])]
     private ?User $createdBy = null;
 
     #[ORM\Column]

@@ -38,6 +38,7 @@ class Voucher
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['voucher:read', 'voucherUser:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
