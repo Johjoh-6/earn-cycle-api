@@ -12,10 +12,11 @@ const VoucherList = (props) => (
         <ReferenceField source="partnerId" reference="partners">
             <ChipField source="name" />
         </ReferenceField>
-        <FieldGuesser source="name" />
+        <FieldGuesser source="name" label="Titre"  />
         <FieldGuesser source="description" />
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
+        <FieldGuesser source="image" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ListGuesser>
@@ -25,10 +26,11 @@ const VoucherShow = (props) => (
         <ReferenceField source="partnerId" reference="partners">
             <ChipField source="name" />
         </ReferenceField>
-        <FieldGuesser source="name" />
+        <FieldGuesser source="name" label="Titre"  />
         <FieldGuesser source="description" />
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
+        <FieldGuesser source="image" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ShowGuesser>
@@ -40,10 +42,11 @@ const VoucherCreate = (props) => (
             filterToQuery={searchText => ({ name: searchText })}
             />
         </ReferenceInput>
-        <InputGuesser source="name" />
+        <InputGuesser source="name" label="Titre"  />
         <InputGuesser source="description" />
         <InputGuesser source="limitUse" />
         <InputGuesser source="price" />
+        <InputGuesser source="image" />
         <InputGuesser source="startDate" />
         <InputGuesser source="endDate" />
     </CreateGuesser>
@@ -55,10 +58,11 @@ const VoucherEdit = (props) => (
             filterToQuery={searchText => ({ name: searchText })}
             />
         </ReferenceInput>
-        <InputGuesser source="name" />
+        <InputGuesser source="name" label="Titre" />
         <InputGuesser source="description" />
         <InputGuesser source="limitUse" />
         <InputGuesser source="price" />
+        <InputGuesser source="image" />
         <InputGuesser source="startDate" />
         <InputGuesser source="endDate" />
     </EditGuesser>
