@@ -97,6 +97,7 @@ class Voucher
     private ?int $price = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
     private ?string $image = null;
 
     public function __construct()
