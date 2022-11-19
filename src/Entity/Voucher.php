@@ -48,7 +48,7 @@ class Voucher
         max: 255,
         maxMessage: 'The description cannot be longer than {{ limit }} characters.'
     )]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'partner:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'vouchers')]
@@ -59,15 +59,15 @@ class Voucher
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read', 'partner:read'])]
     private ?int $limitUse = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read', 'partner:read'])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read', 'partner:read'])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
@@ -88,16 +88,16 @@ class Voucher
         max: 255,
         maxMessage: 'The title cannot be longer than {{ limit }} characters.'
     )]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'partner:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read', 'partner:read'])]
     #[Assert\NotBlank]
     private ?int $price = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read'])]
+    #[Groups(['voucher:read', 'voucher:write', 'voucherUser:read', 'userVoucher:read', 'partner:read'])]
     private ?string $image = null;
 
     public function __construct()
