@@ -47,3 +47,13 @@ this is json ld format.
 http://127.0.0.1:8000/api/categories.json?page=1&deleted=false
 ```
 this is json format.
+
+## run the server
+```symfony serve```
+and go to `http://127.0.0.1:8000/api` 
+for the admin part
+```bash
+cd my-admin
+npm run start
+```
+
