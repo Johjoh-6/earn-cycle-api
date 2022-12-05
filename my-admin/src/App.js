@@ -5,15 +5,10 @@ import {
   HydraAdmin, 
   fetchHydra as baseFetchHydra, 
   hydraDataProvider as baseHydraDataProvider, 
-  ListGuesser, 
-  FieldGuesser, 
   ResourceGuesser, 
-  InputGuesser, 
-  CreateGuesser, 
   useIntrospection,
   hydraSchemaAnalyzer} from "@api-platform/admin";
 import { parseHydraDocumentation } from "@api-platform/api-doc-parser";
-import { TextField , ReferenceField, ReferenceInput, AutocompleteInput} from "react-admin";
 import Login from "./login";
 import authProvider from "./authProvider";
 
