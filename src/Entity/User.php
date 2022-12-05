@@ -84,19 +84,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[groups(['user:read', 'user:write' , 'user-wallet:write'])]
     private ?string $fname = null;
 
-    #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true, length: 100)]
     #[groups(['user:read', 'user:write' , 'user-wallet:write'])]
     private ?string $phone = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true, type: Types::TEXT)]
     #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     private ?string $adress = null;
 
-    #[Assert\NotBlank]
     #[groups(['user:read', 'user:write', 'user-wallet:write'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $nickname = null;
 
     #[groups(['user:read'])]

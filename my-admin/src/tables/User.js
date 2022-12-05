@@ -44,14 +44,14 @@ const UserList = (props) => (
         <InputGuesser source="nickname" label="Username" />
         <InputGuesser source="lname" label="Last Name" />
         <InputGuesser source="fname" label="First Name" />
-        {/* <InputGuesser source="password" label="Password" /> */}
+        <InputGuesser source="password" label="Password" />
       <InputGuesser source="email" />
       <InputGuesser source="phone" />
       <SelectArrayInput source="roles" choices={
-        [
-          'ROLE_USER',
-          'ROLE_ADMIN',
-        ]
+         [
+        {id:'ROLE_USER',name: 'User'},
+        {id:'ROLE_ADMIN', name: 'Admin'},
+      ]
       }/>
       <InputGuesser source="adress" />
         <InputGuesser source="wallet" />
