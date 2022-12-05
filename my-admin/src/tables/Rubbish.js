@@ -1,6 +1,5 @@
 import { ListGuesser,
     FieldGuesser, 
-    ResourceGuesser, 
     InputGuesser, 
     CreateGuesser,
     ShowGuesser,

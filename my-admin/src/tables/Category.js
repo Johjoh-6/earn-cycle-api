@@ -1,10 +1,7 @@
 import { ListGuesser,
     FieldGuesser, 
-    ResourceGuesser, 
-    InputGuesser, 
-    CreateGuesser,
-    ShowGuesser, } from "@api-platform/admin";
-import { TextField , ReferenceField, ReferenceInput, AutocompleteInput, ReferenceArrayField, Datagrid, EmailField, Pagination, ShowButton} from "react-admin";
+    ShowGuesser} from "@api-platform/admin";
+import { TextField , ReferenceField, ReferenceArrayField, Datagrid, EmailField, Pagination, ShowButton} from "react-admin";
 
 
 const CategoriesList = (props) => {

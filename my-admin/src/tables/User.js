@@ -1,11 +1,10 @@
 import { ListGuesser,
     FieldGuesser, 
-    ResourceGuesser, 
     InputGuesser, 
     CreateGuesser,
     ShowGuesser,
     EditGuesser, } from "@api-platform/admin";
-import { TextField , ReferenceField, ReferenceInput, AutocompleteInput, ArrayField, SingleFieldList, ChipField, NumberField, EmailField, FunctionField, SelectArrayInput} from "react-admin";
+import {  NumberField, EmailField, FunctionField, SelectArrayInput} from "react-admin";
 
 const UserList = (props) => (
     <ListGuesser {...props}>

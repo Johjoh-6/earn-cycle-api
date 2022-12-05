@@ -1,10 +1,5 @@
 import { ListGuesser,
-    FieldGuesser, 
-    ResourceGuesser, 
-    InputGuesser, 
-    CreateGuesser,
-    ShowGuesser, } from "@api-platform/admin";
-import { TextField , ReferenceField, ReferenceInput, AutocompleteInput, ArrayField, SingleFieldList, ChipField, NumberField, EmailField} from "react-admin";
+    FieldGuesser } from "@api-platform/admin";
 
 const PartnerList = (props) => (
     <ListGuesser {...props}>
