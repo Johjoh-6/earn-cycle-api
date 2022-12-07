@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\VoucherUserController;
 use App\Repository\UserVoucherRepository;
 use App\State\DeletedProcessor;
 use App\State\UpdatedAtProcessor;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
         new GetCollection(security: 'is_granted("ROLE_ADMIN")', normalizationContext: ['groups' => ['userVoucherAdmin:read']]),
+        new GetCollection(controller: VoucherUserController::class,  name: 'voucher_by_user', uriTemplate: '/user_vouchers_list', security: 'is_granted("ROLE_USER") && object.getUserId() == user', normalizationContext: ['groups' => ['userVoucher:read']]),
         new Post(security: 'is_granted("ROLE_USER")'),
         new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_USER") && object.getUserId() == user', denormalizationContext: ['groups' => ['userVoucherAdmin:write']]),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_user_voucher', uriTemplate: '/user_vouchers/{id}/deleted',  security: 'is_granted("ROLE_USER") && object.getUserId() == user',  denormalizationContext: ['groups' => ['userVoucherAdmin:write']]),
@@ -40,12 +42,12 @@ class UserVoucher
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write'])]
     private ?Voucher $voucherId = null;
 
     #[ORM\ManyToOne(inversedBy: 'userVouchers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write'])]
     private ?User $userId = null;
 
     #[ORM\Column]
