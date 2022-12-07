@@ -42,12 +42,12 @@ class UserVoucher
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userVoucher:read', 'userVoucher:write'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write','userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?Voucher $voucherId = null;
 
     #[ORM\ManyToOne(inversedBy: 'userVouchers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userVoucher:read', 'userVoucher:write'])]
+    #[Groups(['userVoucher:read', 'userVoucher:write', 'userVoucherAdmin:read', 'userVoucherAdmin:write'])]
     private ?User $userId = null;
 
     #[ORM\Column]

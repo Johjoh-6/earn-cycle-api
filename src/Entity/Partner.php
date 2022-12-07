@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PartnerRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['partner:read']],
+    normalizationContext: ['groups' => ['partner:read', 'userVoucher:read', 'voucher:read']],
     denormalizationContext: ['groups' => ['partner:write']],
     operations: [
         new Get(),
