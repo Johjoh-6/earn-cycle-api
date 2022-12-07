@@ -38,6 +38,7 @@ class UserVoucher
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['userVoucher:read', 'userVoucherAdmin:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
