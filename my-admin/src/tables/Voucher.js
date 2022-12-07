@@ -4,7 +4,7 @@ import { ListGuesser,
     CreateGuesser,
     ShowGuesser,
     EditGuesser, } from "@api-platform/admin";
-import {  ReferenceField, ReferenceInput, AutocompleteInput,  ChipField} from "react-admin";
+import {  ReferenceField, ReferenceInput, AutocompleteInput,  ChipField, ImageField} from "react-admin";
 
 const VoucherList = (props) => (
     <ListGuesser {...props}>
@@ -15,7 +15,7 @@ const VoucherList = (props) => (
         <FieldGuesser source="description" />
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
-        <FieldGuesser source="image" />
+        <ImageField source="image" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ListGuesser>
@@ -29,7 +29,7 @@ const VoucherShow = (props) => (
         <FieldGuesser source="description" />
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
-        <FieldGuesser source="image" />
+        <ImageField source="image" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ShowGuesser>
