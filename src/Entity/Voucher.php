@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -33,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
+#[ApiFilter(DateFilter::class, properties:['endDate'])]
 class Voucher
 {
     #[ORM\Id]
