@@ -103,6 +103,10 @@ class Voucher
     #[Groups(['voucher:read', 'voucher:write', 'userVoucher:read', 'userVoucher:read', 'partner:read'])]
     private ?string $image = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['voucher:write', 'userVoucher:read'])]
+    private ?string $urlcode = null;
+
     public function __construct()
     {
         $this->price = 0;
@@ -244,6 +248,18 @@ class Voucher
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getUrlcode(): ?string
+    {
+        return $this->urlcode;
+    }
+
+    public function setUrlcode(?string $urlcode): self
+    {
+        $this->urlcode = $urlcode;
 
         return $this;
     }

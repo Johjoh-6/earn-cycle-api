@@ -16,6 +16,7 @@ const VoucherList = (props) => (
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
         <ImageField source="image" />
+        <FieldGuesser source="urlcode" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ListGuesser>
@@ -30,6 +31,7 @@ const VoucherShow = (props) => (
         <FieldGuesser source="limitUse" />
         <FieldGuesser source="price" />
         <ImageField source="image" />
+        <FieldGuesser source="urlcode" />
         <FieldGuesser source="startDate" />
         <FieldGuesser source="endDate" />
     </ShowGuesser>
@@ -46,6 +48,7 @@ const VoucherCreate = (props) => (
         <InputGuesser source="limitUse" />
         <InputGuesser source="price" />
         <InputGuesser source="image" />
+        <InputGuesser source="urlcode" />
         <InputGuesser source="startDate" />
         <InputGuesser source="endDate" />
     </CreateGuesser>
@@ -62,6 +65,7 @@ const VoucherEdit = (props) => (
         <InputGuesser source="limitUse" />
         <InputGuesser source="price" />
         <InputGuesser source="image" />
+        <InputGuesser source="urlcode" />
         <InputGuesser source="startDate" />
         <InputGuesser source="endDate" />
     </EditGuesser>

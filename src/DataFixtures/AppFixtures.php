@@ -31,9 +31,11 @@ class AppFixtures extends Fixture
         $admin->setWallet(1000);
         $admin->setNickname("Admin");
         
-        // hash password 
-        $password = $this->userPasswordHasherInterface->hashPassword($admin, $_ENV['ADMIN_PASSWORD']);
-        $admin->setPassword($password);
+        // // hash password 
+        // $password = $this->userPasswordHasherInterface->hashPassword($admin, $_ENV['ADMIN_PASSWORD']);
+        // $admin->setPassword($password);
+        $admin->setPlainPassword($_ENV['ADMIN_PASSWORD']);
+        $admin->setPassword($this->userPasswordHasherInterface->hashPassword($admin, $admin->getPlainPassword()));
         $admin->eraseCredentials();
         $manager->persist($admin);
 

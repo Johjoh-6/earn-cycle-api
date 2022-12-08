@@ -28,14 +28,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']],
+    denormalizationContext: ['groups' => ['user:write', 'user-wallet:write']],
     operations: [
         // formats json for avoid the json ld format
-        new Get(denormalizationContext: ['groups'=> 'user-wallet:write']),
+        new Get(),
         new GetCollection(security:'is_granted("ROLE_ADMIN")'),
         // new GetCollection(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class, security:'is_fully_authenticated() && is_granted("ROLE_USER") or object == user', denormalizationContext: ['groups'=> 'user-wallet:write']),
+        new Put(processor: UserProcessor::class, security:'is_fully_authenticated() && is_granted("ROLE_USER") || is_granted("ROLE_ADMIN") || object == user', denormalizationContext: ['groups'=> 'user:write','user-wallet:write']),
         new Put(processor: DeletedProcessor::class,  name: 'deleted_user', uriTemplate: '/users/{id}/deleted', security:'is_granted("ROLE_ADMIN") or object == user'),
         new Delete(security: 'is_granted("ROLE_ADMIN")')
     ]
@@ -67,11 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 8,
-        minMessage: 'The password need to be at least  {{ limit }} character long.'
-    )]
-    #[groups(['user:write'])]
+    #[groups(['user:read'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -100,14 +96,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $level = null;
 
-    #[groups(['user:read', 'user-wallet:write'])]
+    #[groups(['user:read', 'user:write', 'user-wallet:write'])]
     #[ORM\Column]
     private ?int $wallet = null;
 
     #[ORM\Column]
+    #[groups(['user:read','user:write', 'user-wallet:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[groups(['user:read','user:write', 'user-wallet:write'])]
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column]
@@ -117,8 +115,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $userVouchers;
 
     #[ORM\Column]
-    #[groups(['user:read', 'user-wallet:write'])]
+    #[groups(['user:read','user:write', 'user-wallet:write'])]
     private ?int $trees = null;
+
+    // #[SerializedName('password')]
+    #[ORM\Column(nullable: true, length: 255)]
+    #[groups(['user:read','user:write', 'user-wallet:write'])]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'The password need to be at least  {{ limit }} character long.'
+    )]
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -199,6 +206,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
+        $this->plainPassword = null;
+        
     }
 
     public function getLname(): ?string
@@ -359,6 +368,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTrees(int $trees): self
     {
         $this->trees = $trees;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
