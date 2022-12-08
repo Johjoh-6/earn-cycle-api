@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['userVoucher:write']],
     operations: [
         new Get(security: 'is_granted("ROLE_USER") && object.getUserId() == user'),
-        new GetCollection(security: 'is_granted("ROLE_ADMIN")', normalizationContext: ['groups' => ['userVoucherAdmin:read']]),
+        new GetCollection(security: 'is_granted("ROLE_ADMIN") || is_granted("ROLE_USER") && object.getUserId() == user', normalizationContext: ['groups' => ['userVoucherAdmin:read']]),
         new GetCollection(controller: VoucherUserController::class,  name: 'voucher_by_user', uriTemplate: '/user_vouchers_list', security: 'is_granted("ROLE_USER") && object.getUserId() == user', normalizationContext: ['groups' => ['userVoucher:read']]),
         new Post(security: 'is_granted("ROLE_USER")'),
         new Put(processor: UpdatedAtProcessor::class, security: 'is_granted("ROLE_USER") && object.getUserId() == user', denormalizationContext: ['groups' => ['userVoucherAdmin:write']]),
@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
-#[ApiFilter(SearchFilter::class, properties: ['voucherId.id' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['voucherId.id' => 'exact', 'userId' => 'exact'])]
 class UserVoucher
 {
     #[ORM\Id]
