@@ -61,7 +61,14 @@ class UserRubbishController extends AbstractController
         $rubbish->setStreetName(array_key_exists('streetName', $data ) ? $data['streetName'] : '');
         $rubbish->setNbStreet(array_key_exists('nbStreet', $data ) ? $data['nbStreet'] : '');
         $rubbish->setCertified(false);
+        if(is_int($data['category'])){
         $rubbish->setCategory($this->_entityManager->getRepository(Category::class)->find(['id' => $data['category']]));
+        }
+        else{
+            $id = explode('/',$data['category']);
+            $id = $id[count($id)-1];
+            $rubbish->setCategory($this->_entityManager->getRepository(Category::class)->find(['id' => $id]));
+        }
         $rubbish->setCreatedBy($this->getUser());  
         return $rubbish;
     }

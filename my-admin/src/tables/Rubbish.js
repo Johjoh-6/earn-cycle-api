@@ -59,8 +59,8 @@ const Rubbish = (props) => (
       >
         <AutocompleteInput
           filterToQuery={searchText => ({ name: searchText })}
-          optionValue="name"
           optionText="name"
+          optionValue="id"
           label="Category"
         />
       </ReferenceInput>
@@ -78,7 +78,7 @@ const Rubbish = (props) => (
   const RubbishEdit = props => (
     <EditGuesser {...props}>
       <ReferenceInput
-        source="name"
+        source="category"
         reference="categories"
       >
         <AutocompleteInput
