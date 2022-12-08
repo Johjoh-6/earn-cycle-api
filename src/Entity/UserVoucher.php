@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['deleted'])]
-#[ApiFilter(SearchFilter::class, properties: ['voucherId' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['voucherId.id' => 'exact'])]
 class UserVoucher
 {
     #[ORM\Id]
